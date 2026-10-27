@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { isAdmin, adminConfigured } from '@/lib/auth';
 import { listAttempts, storageMode } from '@/lib/store';
 import { loadBank } from '@/lib/bank';
+import { candidateKey } from '@/lib/candidates';
 import { evaluate } from '@/lib/scoring';
 import { CAT_ORDER, CATS, LEVELS } from '@/lib/categories';
 import { Level } from '@/lib/types';
@@ -99,7 +100,7 @@ export default async function AdminHome({ searchParams }: { searchParams: { leve
                 const mins = a.submittedAt ? Math.round((new Date(a.submittedAt).getTime() - new Date(a.createdAt).getTime()) / 60000) : null;
                 return (
                   <tr key={a.id}>
-                    <td><Link href={`/admin/candidate/${a.id}`}><b>{a.name}</b></Link><div className="muted small">{a.email}</div></td>
+                    <td><Link href={`/admin/candidate/${a.id}`}><b>{a.name}</b></Link><div className="muted small">{a.email}{all.filter((x) => candidateKey(x.email) === candidateKey(a.email)).length > 1 && <> · <Link href={`/admin/candidates/${encodeURIComponent(candidateKey(a.email))}`}>all tests</Link></>}</div></td>
                     <td>{LEVELS[a.level].label.split(' (')[0]}</td>
                     <td>{!a.submittedAt ? <span className="badge">In progress</span> : a.review.reviewedAt && e.pendingCount === 0 ? <span className="badge b-good">Reviewed</span> : <span className="badge b-warn">Needs review{e.pendingCount ? ` (${e.pendingCount})` : ''}</span>}
                       <div className="muted small">{fmtDate(a.createdAt)}</div></td>

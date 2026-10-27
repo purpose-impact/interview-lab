@@ -4,6 +4,7 @@ import { isAdmin } from '@/lib/auth';
 import { getAttempt } from '@/lib/store';
 import { evaluate, toOriginal } from '@/lib/scoring';
 import { loadBank } from '@/lib/bank';
+import { candidateKey } from '@/lib/candidates';
 import { CAT_ORDER, CATS, LEVELS, LIVE_DIMENSIONS } from '@/lib/categories';
 import { AdminShell, Bar, fmtDate, pctClass, recBadge } from '../../ui';
 import { DeleteButton, ReviewForm } from '../../AdminBits';
@@ -41,6 +42,11 @@ export default async function Candidate({ params }: { params: { id: string } }) 
             <h1 style={{ marginBottom: 2 }}>{a.name}</h1>
             <div className="muted">{a.email} · {LEVELS[a.level].label}{a.yearsExp ? ` · ${a.yearsExp} yrs` : ''}</div>
             <div className="muted small">Started {fmtDate(a.createdAt)} · {a.submittedAt ? `Submitted ${fmtDate(a.submittedAt)} (${mins} of ${LEVELS[a.level].minutes} min)` : 'Not submitted yet'}</div>
+            <div className="row noprint" style={{ margin: '8px 0' }}>
+              <a className="btn" href={`/api/admin/report?attempt=${a.id}`} download>Download feedback summary</a>
+              <Link className="btn" href={`/admin/report?attempt=${a.id}`}>Printable report / PDF</Link>
+              <Link className="btn" href={`/admin/candidates/${encodeURIComponent(candidateKey(a.email))}`}>All tests &amp; combined profile</Link>
+            </div>
             <div className="muted small">Integrity signals: {a.flags.blur} tab/window switches · {a.flags.paste} pastes</div>
           </div>
           <div style={{ textAlign: 'right' }}>

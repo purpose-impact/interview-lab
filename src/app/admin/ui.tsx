@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { LogoutButton } from './AdminBits';
 import Logo from '../Logo';
 
-export function AdminShell({ children, active }: { children: React.ReactNode; active?: 'dash' | 'guide' | 'questions' }) {
+export function AdminShell({ children, active }: { children: React.ReactNode; active?: 'dash' | 'candidates' | 'guide' | 'questions' }) {
   return (
     <>
       <div className="topbar">
@@ -10,6 +10,7 @@ export function AdminShell({ children, active }: { children: React.ReactNode; ac
           <span className="brand row"><Logo height={26} />Java Interview Lab · Admin</span>
           <nav className="nav">
             <Link href="/admin" style={active === 'dash' ? { fontWeight: 700 } : undefined}>Dashboard</Link>
+            <Link href="/admin/candidates" style={active === 'candidates' ? { fontWeight: 700 } : undefined}>Candidates</Link>
             <Link href="/admin/questions" style={active === 'questions' ? { fontWeight: 700 } : undefined}>Questions</Link>
             <Link href="/admin/guide" style={active === 'guide' ? { fontWeight: 700 } : undefined}>Interviewer guide</Link>
             <a href="/api/admin/export">Export CSV</a>

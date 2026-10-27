@@ -90,6 +90,11 @@ export function evaluate(a: Attempt, bank: Bank): Evaluation {
     if (v !== undefined) items.push({ id: `live:${d.id}`, cat: 'project', kind: 'text', frac: v / 5, weight: LIVE_WEIGHT, pending: false, final: v });
   }
 
+  return summarize(items, { correct, total });
+}
+
+/** Rolls scored items up into area scores, the weighted overall and a recommendation. */
+function summarize(items: ItemResult[], obj: { correct: number; total: number }): Evaluation {
   const cats = {} as Record<CatId, CatResult>;
   for (const c of CAT_ORDER) {
     const its = items.filter((i) => i.cat === c);
@@ -108,6 +113,19 @@ export function evaluate(a: Attempt, bank: Bank): Evaluation {
     items, cats, overall,
     pendingCount: items.filter((i) => i.pending).length,
     recommendation: recommend(overall),
-    objective: { correct, total, pct: total ? (correct / total) * 100 : null },
+    objective: { correct: obj.correct, total: obj.total, pct: obj.total ? (obj.correct / obj.total) * 100 : null },
   };
+}
+
+/**
+ * Candidate-level view across several tests: every scored item from every test is pooled, so an area's
+ * score is the weighted average over all questions asked in that area, and areas covered by only one
+ * test still count. Pass submitted attempts only.
+ */
+export function aggregate(evals: Evaluation[]): Evaluation {
+  const items = evals.flatMap((e) => e.items);
+  return summarize(items, {
+    correct: evals.reduce((s, e) => s + e.objective.correct, 0),
+    total: evals.reduce((s, e) => s + e.objective.total, 0),
+  });
 }
