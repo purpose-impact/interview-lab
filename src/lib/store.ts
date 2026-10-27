@@ -4,8 +4,16 @@ import { Attempt, Question } from './types';
  * Storage: Upstash Redis REST (Vercel Marketplace / legacy Vercel KV) when configured,
  * otherwise an in-memory Map (fine for local dev; NOT durable on serverless).
  */
-const URL_ = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
-const TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+/** Finds the first env var ending in one of `suffixes`; the Vercel integration may add a custom prefix (e.g. STORAGE_KV_REST_API_URL). */
+function envBySuffix(...suffixes: string[]): string | undefined {
+  for (const s of suffixes) {
+    const key = Object.keys(process.env).find((k) => k.endsWith(s) && !k.includes('READ_ONLY') && process.env[k]);
+    if (key) return process.env[key];
+  }
+  return undefined;
+}
+const URL_ = envBySuffix('UPSTASH_REDIS_REST_URL', 'KV_REST_API_URL');
+const TOKEN = envBySuffix('UPSTASH_REDIS_REST_TOKEN', 'KV_REST_API_TOKEN');
 
 export const storageMode: 'redis' | 'memory' = URL_ && TOKEN ? 'redis' : 'memory';
 
