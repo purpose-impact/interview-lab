@@ -1,0 +1,58 @@
+import { mc, tx } from './helpers';
+
+/**
+ * Behaviour & learning-mindset. Situational-judgement MCQs (auto-graded: the best answer shows
+ * ownership, evidence-based thinking, openness to feedback and sensible escalation) plus
+ * reflective written questions that the interviewer scores 0-5.
+ */
+export const MINDSET = [
+  mc('B1', 'mindset', 1, 'You are assigned a ticket that uses a library/framework you have never worked with, and the sprint ends in 3 days. What do you do first?',
+    ['Start coding from a similar-looking Stack Overflow answer and fix issues as they appear', 'Skim the official docs / a minimal sample to learn the core model, build a small spike, then ask a teammate to sanity-check your approach', 'Tell the lead you cannot do it because you have no experience with it', 'Wait for a teammate who knows the library to take it over'],
+    1, 'Time-boxed learning from primary sources, a quick spike to validate understanding, then an early review. Copy-pasting hides gaps; declining or waiting shows low initiative.'),
+  mc('B2', 'mindset', 1, 'In code review a teammate says your approach is wrong, but you believe it is correct. What is the best response?',
+    ['Merge anyway because the tests pass', 'Agree immediately to avoid conflict', 'Ask for the reasoning, share your evidence (benchmark, spec, test), and be open to changing your mind; involve a third person if you still disagree', 'Escalate to the manager right away'],
+    2, 'Disagree with evidence, stay curious about their view, and escalate only when you cannot converge. Blind agreement and blind insistence are both weak.'),
+  mc('B3', 'mindset', 1, 'You discover that a bug you shipped last week is causing wrong data for a small set of customers. What should you do?',
+    ['Quietly fix it in the next release and hope nobody notices', 'Raise it to the team now with impact and a proposed fix, fix it, then add a test so it cannot recur', 'Wait to see whether any customer complains', 'Find out whether someone else touched that code recently'],
+    1, 'Early, transparent ownership with containment, a fix and a prevention step. Hiding or deflecting turns a small defect into a trust problem.'),
+  mc('B4', 'mindset', 2, 'A production issue is open and you have a theory about the cause, but you have no evidence yet. What do you do?',
+    ['Deploy a fix for your theory immediately to save time', 'Treat the theory as a hypothesis: collect evidence (logs, metrics, thread/heap dump), try to disprove it, and only then change anything', 'Ask everyone on the team for their theory and pick the most popular', 'Restart the service and close the incident'],
+    1, 'Hypothesis-driven debugging: evidence first, try to falsify, change one thing at a time. Fixing a guess can mask the real cause or make things worse.'),
+  mc('B5', 'mindset', 2, 'Your manager asks for a feature by Friday, but you realise it needs a design change that cannot be done safely by then. What is the best action?',
+    ['Deliver by Friday with shortcuts and say nothing', 'Tell them now: explain the risk, offer options (reduced scope, phased delivery, later date) with trade-offs, and agree on one', 'Miss the date and explain afterwards', 'Ask a colleague to take the work'],
+    1, 'Surface constraints early and bring options, not just problems. Silent shortcuts create hidden technical debt; late surprises damage trust.'),
+  mc('B6', 'mindset', 2, 'How do you keep your technical skills current while delivering on a busy project?',
+    ['I learn only when a project requires it', 'Regular small habits: read release notes/design write-ups, try new things in side spikes, and apply what is useful back to the project, then share it with the team', 'I rely on colleagues to tell me what is important', 'I take a certification every few years'],
+    1, 'Continuous, applied learning that is shared with the team. Purely reactive or purely certificate-driven learning is weaker.'),
+  mc('B7', 'mindset', 2, 'A junior teammate keeps submitting code with the same style and design problems. What do you do?',
+    ['Rewrite their code yourself after they submit', 'Give specific, kind feedback with examples; pair on one change; agree on a checklist or linter so the feedback becomes automatic', 'Mention it to the manager in your next 1:1', 'Stop reviewing their pull requests'],
+    1, 'Coach directly and make the standard objective and automated. Rewriting hides the problem; escalating first skips the chance to help.'),
+  mc('B8', 'mindset', 2, 'You make a mistake that takes down a non-critical internal tool for an hour. Which follow-up best shows a learning attitude?',
+    ['Apologise and move on', 'Write a short blameless post-mortem: timeline, root cause, what let it reach production, and one or two concrete safeguards; share it with the team', 'Make sure it is documented that the change was approved by someone else', 'Avoid touching that area again'],
+    1, 'Learn in the open, focus on the system (not blame) and leave behind a safeguard. Blame-shifting and avoidance do not improve anything.'),
+  mc('B9', 'mindset', 3, 'The team wants to adopt a new, trendy technology you have not used. You are asked for your view. What is the strongest response?',
+    ['Support it because modern tools are always better', 'Oppose it because the current stack works', 'Define the problem it should solve and the success criteria, run a time-boxed proof of concept against the real use case, weigh operational cost and team skills, then decide with data', 'Let the most senior person decide'],
+    2, 'Evaluate against the problem, not the hype: PoC, operability, skills and exit cost. Both reflexive adoption and reflexive rejection skip the thinking.'),
+  mc('B10', 'mindset', 3, 'Two teammates have a heated technical disagreement that is blocking the sprint, and you are the tech lead. What do you do?',
+    ['Pick the option you prefer and tell them to proceed', 'Let them sort it out; it is not your job', 'Get both to state the requirements and constraints, compare options against them (small spike or data if needed), make a decision with the reasoning documented, and make it clear that the call can be revisited with new evidence', 'Take it to the manager'],
+    2, 'Facilitate with shared criteria and make a transparent, time-boxed decision. Decide-by-seniority loses buy-in; avoiding it stalls the team.'),
+  mc('B11', 'mindset', 3, 'You realise a design you proposed and the team built is now causing recurring operational pain. What do you do?',
+    ['Defend it; changing now would look bad', 'Quietly work around the pain', 'Acknowledge it openly, quantify the cost of the pain, propose an incremental migration path with trade-offs, and ask the team to challenge it', 'Blame changing requirements'],
+    2, 'Strong engineers revisit their own decisions when evidence changes. Quantify, propose a safe migration and invite challenge.'),
+  mc('B12', 'mindset', 3, 'You are asked to estimate a project in an area that is mostly unknown to you. What is the best approach?',
+    ['Give a confident single number to look decisive', 'Refuse to estimate until everything is known', 'Break it down, call out unknowns, spike the riskiest parts first, give a range with assumptions, and re-estimate as you learn', 'Double the estimate of a similar past project'],
+    2, 'Honest ranges with explicit assumptions, riskiest unknowns first, and re-estimation. False precision and refusal are both unhelpful.'),
+
+  tx('M_LEARN', 'mindset', 1,
+    'Tell us about a technology or concept you learned recently that was hard for you. How did you learn it, how did you know you had really understood it, and where have you applied it?',
+    ['A specific, recent example (not a generic statement)', 'A deliberate learning method: docs/source, small experiments, teaching others', 'A way of checking understanding: built something, wrote a test, explained it, found a failure mode', 'Applied to real work, with an observable result', 'Honest about difficulty and what they still do not know'],
+    [['recent', 'last month', 'last year', 'this year', 'learned', 'learnt'], ['docs', 'documentation', 'tutorial', 'course', 'source code', 'book', 'read', 'experiment', 'poc', 'spike'], ['test', 'built', 'demo', 'explained', 'taught', 'presented', 'verified'], ['applied', 'project', 'production', 'used it', 'result', 'improved', 'reduced'], ['difficult', 'hard', 'struggled', 'mistake', 'still learning', 'do not know']]),
+  tx('M_FEEDBACK', 'mindset', 2,
+    'Describe a time you received critical feedback (from a reviewer, manager or customer) that you initially disagreed with. What did you do, what changed, and what would you do differently now?',
+    ['A real example with context', 'Listened and asked clarifying questions instead of reacting defensively', 'Looked for evidence on both sides', 'Concrete change in behaviour or design as a result', 'Reflection that shows self-awareness, not self-justification'],
+    [['feedback', 'review', 'comment', 'criticism'], ['listened', 'asked', 'understood', 'clarified', 'discussed'], ['evidence', 'data', 'benchmark', 'tested', 'measured', 'verified'], ['changed', 'improved', 'adopted', 'updated', 'refactored', 'now i'], ['learned', 'next time', 'would do differently', 'realised', 'realized']]),
+  tx('M_MISTAKE', 'mindset', 2,
+    'Describe a technical mistake or failed decision of yours that had a real cost (time, bug, outage, rework). What happened, how did you handle it, and what do you do differently now?',
+    ['Owns the mistake without blaming others or circumstances', 'Clear account of impact and how it was detected', 'Describes how they contained and fixed it, and communicated', 'Describes a lasting change in practice (test, review step, checklist, monitoring)', 'Shows learning and maturity rather than perfection'],
+    [['i made', 'my mistake', 'i missed', 'i should', 'i was responsible', 'my fault', 'i assumed'], ['impact', 'customers', 'outage', 'bug', 'delay', 'rework', 'cost'], ['fixed', 'rolled back', 'rollback', 'informed', 'communicated', 'escalated', 'hotfix'], ['test', 'monitoring', 'alert', 'checklist', 'review', 'process', 'safeguard'], ['learned', 'lesson', 'now i', 'since then', 'differently']]),
+];

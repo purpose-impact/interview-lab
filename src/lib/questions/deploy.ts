@@ -1,0 +1,28 @@
+import { mc } from './helpers';
+
+export const DEPLOY = [
+  mc('dep01', 'deploy', 1, 'Why use multi-stage Docker builds for a Java app?',
+    ['They are faster at runtime', 'Build tools stay out of the final image - smaller, safer runtime image (JRE only)', 'They are mandatory', 'They improve networking'], 1,
+    'Also run as non-root and use layered jars.'),
+  mc('dep02', 'deploy', 1, 'Where should production DB credentials live?',
+    ['In source control', 'Environment variables injected from a secret manager (Kubernetes Secret, Vault, Key Vault) - never committed', 'In application.properties in git', 'In code comments'], 1,
+    'Twelve-factor: config in the environment.'),
+  mc('dep03', 'deploy', 2, 'JVM memory in containers:',
+    ['Set -Xmx equal to the container limit', 'Use container-aware sizing (e.g. MaxRAMPercentage ~70-75) leaving headroom for metaspace, thread stacks and native memory', 'Never set limits', 'Only set -Xms'], 1,
+    'Otherwise the OOM-killer terminates the pod.'),
+  mc('dep04', 'deploy', 2, 'Liveness vs readiness probe:',
+    ['They are the same', 'Liveness restarts a stuck container; readiness removes a pod from service endpoints until it can serve traffic', 'Readiness restarts the pod', 'Liveness controls load balancing'], 1,
+    'Do not make liveness depend on downstream systems.'),
+  mc('dep05', 'deploy', 2, 'A zero-downtime release needs:',
+    ['Stop everything then start', 'Rolling/blue-green/canary rollout, readiness probes, graceful shutdown (server.shutdown=graceful) and backward-compatible DB migrations', 'A big-bang weekend release', 'Hot-swapping classes'], 1,
+    'Plus quick rollback.'),
+  mc('dep06', 'deploy', 3, 'How do you rename a column with no downtime?',
+    ['Drop and recreate', 'Expand -> migrate/dual-write -> contract across several releases using Flyway/Liquibase', 'Run ALTER manually in prod', 'Schedule downtime'], 1,
+    'Old and new app versions run side by side during a rollout.'),
+  mc('dep07', 'deploy', 2, 'A sensible CI/CD order is:',
+    ['Deploy -> test -> build', 'Build -> unit tests -> static analysis/security scan -> versioned immutable image -> deploy to staging -> integration/smoke tests -> promote', 'Manual copy of the jar', 'Test in production only'], 1,
+    'Build once, promote the same artifact.'),
+  mc('dep08', 'deploy', 2, 'What does good observability for a Spring Boot service include?',
+    ['Logs only', 'Structured logs, metrics (Micrometer/Prometheus), traces (OpenTelemetry), dashboards and alerts on SLOs', 'CPU graph only', 'Nothing until incidents happen'], 1,
+    'Alert on symptoms (latency/errors), not just causes.'),
+];
