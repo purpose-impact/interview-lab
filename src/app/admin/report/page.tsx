@@ -6,19 +6,25 @@ import { candidateKey } from '@/lib/candidates';
 import { AreaRow, buildReport } from '@/lib/report';
 import { Attempt } from '@/lib/types';
 import { AdminShell, Bar, fmtDate, recBadge } from '../ui';
+import Radar from '../Radar';
 import PrintButton from './PrintButton';
 
 export const dynamic = 'force-dynamic';
 
 const pct = (v: number | null) => (v === null ? '-' : `${v.toFixed(0)}%`);
 
+/** Skill profile: radar chart beside the per-area bars. */
 function Areas({ rows }: { rows: AreaRow[] }) {
+  const scored = rows.filter((a) => a.pct !== null);
   return (
-    <>
-      {rows.filter((a) => a.pct !== null).map((a) => (
-        <div className="barrow" key={a.id}><span title={a.label}>{a.short}</span><Bar pct={a.pct} /><b>{pct(a.pct)}</b></div>
-      ))}
-    </>
+    <div className="two avoid-break">
+      <div><Radar labels={scored.map((a) => a.short)} values={scored.map((a) => a.pct)} size={300} /></div>
+      <div>
+        {scored.map((a) => (
+          <div className="barrow" key={a.id}><span title={a.label}>{a.short}</span><Bar pct={a.pct} /><b>{pct(a.pct)}</b></div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -71,7 +77,7 @@ export default async function ReportPage({ searchParams }: { searchParams: { att
       )}
 
       {r.attempts.map((a, i) => (
-        <section className="panel" key={a.id}>
+        <section className="panel report-test" key={a.id}>
           <h2>Test {i + 1} of {r.attempts.length} · {a.level}</h2>
           <div className="muted small">Started {fmtDate(a.started)} · {a.submitted ? `submitted ${fmtDate(a.submitted)} (${a.minutes} of ${a.limit} min)` : 'not submitted'} · {a.flags.blur} tab switches, {a.flags.paste} pastes</div>
           <div className="row" style={{ gap: 20, margin: '10px 0' }}>
